@@ -5,7 +5,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const endowmentPledgeRoutes = require("./routes/endowmentPledgeRoutes");
-const paymentRoutes = require("./routes/paymentRoutes");
+const donationRoutes = require("./routes/donationRoutes");
 
 dotenv.config();
 connectDB();
@@ -21,7 +21,7 @@ app.use(cors({
 
 app.use("/auth", authRoutes); //routes to register and log in
 app.use("/endowment-pledges", endowmentPledgeRoutes);
-app.use("/endowment-pledge", paymentRoutes)
+app.use("/endowment-pledge", donationRoutes)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

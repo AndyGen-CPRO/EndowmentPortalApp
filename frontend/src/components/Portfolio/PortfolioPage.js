@@ -32,41 +32,33 @@ const Portfolio = () => {
     };
 
     const createEndowmentPledge = () => {
-        navigate("/")
+        navigate("/add-pledge")
     }
 
     return (
         <div>
             <h1>Endowment Portfolio</h1>
 
-            <button onclick={createEndowmentPledge}>Create Endowment Pledge</button>
+            <button onClick={createEndowmentPledge}>New Pledge</button>
 
             <h3>Your Pledges</h3>
-            <p>{message}</p>
+            {message && <p>{message}</p>}
             <div>
                 {pledges.length > 0 ? (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Beneficiary</th>
-                                <th>Type</th>
-                                <th>Pledge Start Date</th>
-                                <th>Pledge End Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                        <div>
                             {pledges.map((pledge) => (
-                                <tr key={pledge.id}>
-                                    <td>{pledge.beneficiary}</td>
-                                    <td>{pledge.type}</td>
-                                    <td>{new Date(pledge.pledgeStart).getFullYear()}</td>
-                                    <td>{new Date(pledge.pledgeEnd).getFullYear()}</td>
-                                </tr>
+                                <ul key={pledge.id}>
+                                    <h4>{pledge.beneficiaryName}</h4>
+                                    <span>
+                                        <label>Purpose:</label> {pledge.donationPurpose} -
+                                        Pledge Start: {new Date(pledge.pledgeStart).getFullYear()} -
+                                        Pledge End: {new Date(pledge.pledgeEnd).getFullYear()} 
+                                    </span>
+                                </ul>
                             ))}
-                        </tbody>
-                    </table>
+                        </div>
                 ) : (
-                    <p>You have 0 Endowment Pledges in your Portfolio. Click the "Create Endowment Pledge" to start.</p>
+                    <p>You have 0 Endowment Pledges in your Portfolio. Click "New Pledge" to start.</p>
                 )}
             </div>
         </div>

@@ -15,7 +15,7 @@ const Home = () => {
           {!token ? (
             <>
               <Link to="/register">
-                <button>Sign Up</button>
+                <button>Register</button>
               </Link>
               <Link to="/login">
                 <button>Log In</button>
@@ -23,7 +23,7 @@ const Home = () => {
             </>
           ) : (
             <Link to="/portfolio">
-              <button>Continue to your Endowment Portfolios</button>
+              <button>Continue to your Endowment Portfolio</button>
             </Link>
           )}
         </div>

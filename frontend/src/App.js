@@ -6,6 +6,7 @@ import Navbar from './components/Nav/NavBar';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Portfolio from './components/Portfolio/PortfolioPage';
+import AddPledge from './components/Portfolio/AddPledgePage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/add-pledge" element={<AddPledge />} />
           </Routes>
       </Router>
     </div>

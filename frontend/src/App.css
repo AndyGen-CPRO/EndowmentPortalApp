@@ -78,7 +78,9 @@ h1 {
 
 h2 {
   margin-top: 30px;
+  padding-top: 10px;
   color: #226442;
+  border-top: 2px solid #656565;
 }
 
 label {
@@ -101,3 +103,4 @@ input {
 .logout-btn {
   text-align: right;
 }
+

@@ -1,49 +1,78 @@
 const EndowmentPledge = require("../models/endowmentPledgeModel");
+const Donation = require("../models/donationModel");
+const { createDonations } = require("./donationController");
 
-const createEndowmentPledge = async (req,res) => {
+const createEndowmentPledge = async (req, res) => {
     try {
         const { 
-            beneficiary,
-            type,
+            beneficiaryName,
+            donationPurpose,
             status,
             pledgeStart,
             pledgeEnd,
-            paymentType,
-            message,
-         } = req.body;
+            donationType,
+            donorMessage,
+            donations
+        } = req.body;
 
         const existingPledge = await EndowmentPledge.findOne({
-            beneficiary,
+            beneficiaryName,
             userId: req.user.id,
-            type,
+            donationPurpose,
             $or: [
                 { pledgeStart: { $lte: pledgeEnd, $gte: pledgeStart } },
-                { pledgeEnd: { $lte: pledgeEnd, $gte: pledgeStart } } 
+                { pledgeEnd: { $lte: pledgeEnd, $gte: pledgeStart } }
             ]
         });
 
         if (existingPledge) {
-            return res.status(400).json({ message: "An endowment pledge with the same details already exists." })
+            return res.status(400).json({ message: "An endowment pledge with the same details already exists." });
+        }
+
+        if (donations && donations.length > 0) {
+            for (let i = 0; i < donations.length; i++) {
+                const { donationDate } = donations[i]; 
+                const existingDonation = await Donation.findOne({ beneficiaryName, donationPurpose, donationDate });
+
+                if (existingDonation) {
+                    return res.status(400).json({ message: `Donation for the year ${donationDate} already exists.` });
+                }
+            }
         }
 
         const newPledge = new EndowmentPledge({
-            beneficiary,
-            type,
+            beneficiaryName,
+            donationPurpose,
             status,
             pledgeStart,
             pledgeEnd,
-            paymentType,
-            message,
+            donationType,
+            donorMessage,
             userId: req.user.id
         });
 
         await newPledge.save();
+
+        let donationResponse = null;
+        if (donations && donations.length > 0) {
+            try {
+                donationResponse = await createDonations(newPledge._id, donations);
+            } catch (donationError) {
+                return res.status(400).json({ message: `Error creating donations: ${donationError.message}` });
+            }
+        }
         
-        res.status(201).json({ message: "Endowment pledge creation successful." })
+        res.status(201).json({ 
+            message: "Endowment pledge and donations creation successful.", 
+            newPledge, 
+            donationResponse 
+        });
+
     } catch (error) {
-        res.status(400).json({ message : 'Error creating endowment.',error})
+        res.status(400).json({ message: "Error creating endowment.", error: error.message });
     }
-}
+};
+
 
 const getEndowmentPledgeById = async (req,res) => {
     try {
