@@ -7,16 +7,16 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [justLoggedIn, setJustLoggedIn] = useState(false); 
     const userToken = getToken();
     const navigate = useNavigate();
     
     useEffect(() => {
-        if(userToken){
-            navigate("/projects");
+        if (userToken && !justLoggedIn) { 
             alert("You are currently logged in.");
-            return;
+            navigate("/portfolio");
         }
-    }, [userToken, navigate]);
+    }, [userToken, navigate, justLoggedIn]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,7 +29,9 @@ const Login = () => {
                 const { token } = response.data;
                 setToken(token);
                 setMessage("Log in successful.");
-                navigate("/projects");
+                setJustLoggedIn(true);
+                navigate("/portfolio");
+                return
             } else {
                 setMessage("Unknown response from the server.");
             }

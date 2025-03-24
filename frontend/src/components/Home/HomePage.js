@@ -22,7 +22,7 @@ const Home = () => {
               </Link>
             </>
           ) : (
-            <Link to="">
+            <Link to="/portfolio">
               <button>Continue to your Endowment Portfolios</button>
             </Link>
           )}

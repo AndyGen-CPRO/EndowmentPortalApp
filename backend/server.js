@@ -20,8 +20,8 @@ app.use(cors({
 }));
 
 app.use("/auth", authRoutes); //routes to register and log in
-app.use("/endowmentPledges", endowmentPledgeRoutes);
-app.use("/endowmentPledge", paymentRoutes)
+app.use("/endowment-pledges", endowmentPledgeRoutes);
+app.use("/endowment-pledge", paymentRoutes)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
