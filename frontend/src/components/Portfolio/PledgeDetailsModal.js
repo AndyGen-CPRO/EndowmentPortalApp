@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => {
     const [editMode, setEditMode] = useState(false);
+    const [endowmentPledge, setEndowmentPledge] = useState(null);
     const [beneficiaryName, setBeneficiaryName] = useState("");
     const [donationPurpose, setDonationPurpose] = useState("");
     const [status, setStatus] = useState("on-going");
@@ -25,6 +26,29 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
     useEffect(() => {
         fetchDonations();
     }, []);
+
+    useEffect(() => {
+        if (pledge) {
+            setBeneficiaryName(pledge.beneficiaryName);
+            setDonationPurpose(pledge.donationPurpose);
+            setStatus(pledge.status);
+            setPledgeStart(new Date(pledge.pledgeStart));
+            setPledgeEnd(new Date(pledge.pledgeEnd));
+        }
+    }, [pledge]);
+
+    const fetchEndowmentPledge = async() => {
+        try {
+            const response = await axios.get(`http://localhost:5000/endowment-pledges/${pledge._id}/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setEndowmentPledge(response.data);
+        } catch (error) {
+            setMessage(error);
+        }
+    }    
 
     const handlePledgeUpdate = async(e) => {
         e.preventDefault();
@@ -70,9 +94,9 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         }
     };
 
-    const editBtn = () => { //sets the editMode boolean to the opposite if accessed
+    const editBtn = () => { 
         setEditMode(!editMode);
-        setBeneficiaryName(pledge.beneficiaryName); //sets the existing name and description to the input fields when editing
+        setBeneficiaryName(pledge.beneficiaryName);
         setDonationPurpose(pledge.donationPurpose);
         setStatus(pledge.status);
         setPledgeStart(pledge.pledgeStart);
@@ -170,13 +194,13 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                         <h2>{pledge.beneficiaryName}</h2>
                         <h4>{pledge.donationPurpose}</h4>
                         {pledge.donorMessage && <p>From the donor: <i>"{pledge.donorMessage}"</i></p>}
-                        <p>Status: {pledge.status}</p>
+                        <p className="pledge-detail">Status: {pledge.status}</p>
                         <p>Pledge Start Date: {new Date(pledge.pledgeStart).getFullYear()}</p>
                         <p>Pledge End Date: {new Date(pledge.pledgeEnd).getFullYear()}</p>
-                        <p className="display-donation-type">Donation Type: {pledge.donationType}</p>
+                        <p className="pledge-detail">Donation Type: {pledge.donationType}</p>
 
                         <button onClick={editBtn}>Edit Pledge</button>
-                        <button onClick={() => setAddDonationBtn(true)}>Add Donation</button>
+                        <button onClick={() => setAddDonationBtn(!addDonationBtn)}>Add Donation</button>
                         <button className="close-btn" onClick={() => closeModal(false)}>Close</button>
 
                         {addDonationBtn && (
@@ -257,12 +281,15 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                                     onChange={(date) => setPledgeStart(date)}
                                     showYearPicker
                                     dateFormat="yyyy"
-                                    minDate={donationYears.length > 0 ? new Date(Math.min(...donationYears), 0, 1) : null} 
-                                    maxDate={pledgeEnd}
-                                    filterDate={(date) => !donationYears.includes(date.getFullYear())}
+                                    minDate={null} 
+                                    maxDate={new Date(Math.min(...donationYears), 0, 1)} 
+                                    filterDate={(date) => {
+                                        const donationYear = date.getFullYear();
+                                        return donationYear <= Math.min(...donationYears); 
+                                    }}
                                     onKeyDown={(e) => {
                                         e.preventDefault();
-                                        }}
+                                    }}
                                 />
                             </div>
                             
@@ -274,8 +301,10 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                                     showYearPicker
                                     dateFormat="yyyy"
                                     minDate={pledgeStart}
-                                    maxDate={donationYears.length > 0 ? new Date(Math.max(...donationYears), 0, 1) : null}
-                                    filterDate={(date) => !donationYears.includes(date.getFullYear())}
+                                    filterDate={(date) => {
+                                        const donationYear = date.getFullYear();
+                                        return donationYear >= Math.max(...donationYears); 
+                                    }}
                                     onKeyDown={(e) => {
                                         e.preventDefault();
                                         }}

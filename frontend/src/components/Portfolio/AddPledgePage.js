@@ -147,7 +147,7 @@ const AddPledge = () => {
                             <input
                                 type="number"
                                 value={fixedAmount}
-                                onChange={(e) => setFixedAmount(Number(e.target.value))}
+                                onChange={(e) => setFixedAmount(Number(e.target.value).toString())}
                                 min={0}
                                 required 
                             />
@@ -158,11 +158,11 @@ const AddPledge = () => {
                                 <ul>
                                     {donations.map((donation, i) => (
                                         <li key={donation.donationDate}>
-                                            <label>{donation.donationDate}</label>
+                                            <label>{new Date(donation.donationDate).getFullYear()}</label>
                                             <input
                                                 type="number"
                                                 value={donation.amount}
-                                                onChange={(e) => handleDonationChange(i, e.target.value)}
+                                                onChange={(e) => handleDonationChange(i, Number(e.target.value).toString())}
                                                 min={0}
                                                 required
                                             />
