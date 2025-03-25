@@ -53,6 +53,9 @@ const createEndowmentPledge = async (req, res) => {
 
         await newPledge.save();
 
+
+        console.log("Received donations:", donations);
+        
         let donationResponse = null;
         if (donations && donations.length > 0) {
             try {
