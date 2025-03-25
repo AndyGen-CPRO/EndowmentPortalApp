@@ -228,9 +228,9 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                                         {editDonationId === donation._id ? (
                                             <div>
                                                 <input
-                                                    type="number"
-                                                    value={editAmount}
-                                                    onChange={(e) => setEditAmount(e.target.value)}
+                                                    type="text"
+                                                    value={"$" + editAmount}
+                                                    onChange={(e) => setEditAmount(e.target.value.replace(/\D/g, ''))}
                                                     min={0}
                                                     required
                                                 />

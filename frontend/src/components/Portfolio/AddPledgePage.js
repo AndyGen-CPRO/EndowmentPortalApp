@@ -145,9 +145,9 @@ const AddPledge = () => {
                         <div>
                             <label>Annual Donation Amount</label>
                             <input
-                                type="number"
-                                value={fixedAmount}
-                                onChange={(e) => setFixedAmount(Number(e.target.value).toString())}
+                                type="text"
+                                value={"$" + fixedAmount}
+                                onChange={(e) => setFixedAmount(Number(e.target.value.replace(/\D/g, '')))}
                                 min={0}
                                 required 
                             />
@@ -160,9 +160,9 @@ const AddPledge = () => {
                                         <li key={donation.donationDate}>
                                             <label>{new Date(donation.donationDate).getFullYear()}</label>
                                             <input
-                                                type="number"
-                                                value={donation.amount}
-                                                onChange={(e) => handleDonationChange(i, Number(e.target.value).toString())}
+                                                type="text"
+                                                value={"$" + donation.amount}
+                                                onChange={(e) => handleDonationChange(i, Number(e.target.value.replace(/\D/g, '')).toString())}
                                                 min={0}
                                                 required
                                             />
