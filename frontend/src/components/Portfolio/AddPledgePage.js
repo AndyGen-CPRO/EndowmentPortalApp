@@ -34,7 +34,9 @@ const AddPledge = () => {
             if (startYear <= endYear) {
                 const newDonations = []
                 for (let year = startYear; year <= endYear; year++) {
-                    newDonations.push({ donationDate: year, amount: donationType === "fixed" ? fixedAmount : 0 });
+                    newDonations.push({ 
+                        donationDate: new Date(year, 0, 1).toISOString(), 
+                        amount: donationType === "fixed" ? fixedAmount : 0 });
                 }
                 setDonations(newDonations);
             }
@@ -65,6 +67,8 @@ const AddPledge = () => {
                 },
                 withCredentials: true,
             });
+            setMessage("Pledge created successfully.")
+            navigate("/portfolio")
         } catch (error) {
             setMessage(error.message);
         }

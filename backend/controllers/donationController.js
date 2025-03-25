@@ -33,7 +33,7 @@ const createDonations = async (endowmentPledgeId, donations) => {
             const { donationDate, amount } = donations[i];
 
             newDonations.push({
-                donationDate,
+                donationDate: new Date(i.donationDate),
                 amount,
                 endowmentPledgeId
             })
@@ -66,6 +66,10 @@ const getDonationById = async (req,res) => {
 const getAllDonations = async (req,res) => {
     try {
         const donation = await Donation.find({ endowmentPledgeId: req.params.endowmentPledgeId })
+
+        if (!donation) {
+            res.status(404).json({ message: "No donations found." })
+        }
         res.status(200).json(donation);
     } catch(error) {
         res.status(400).json({ message: "Error retrieving donations.", error })
