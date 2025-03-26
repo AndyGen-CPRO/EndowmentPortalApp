@@ -141,12 +141,7 @@ const AddPledge = () => {
 
                 <div>
                     <h2>Donation Details</h2>  
-                            
-     <p>Use the calculator by clicking on the submit button below to see the impact your gift can have over time!</p>
-<p>To assist you in taking the next step, please contact your accountant, lawyer, financial advisor, or the Community Foundation of Central Alberta at
-         <strong> <a href="tel:+14033416911">(403) 341-6911</a></strong>.
-          Please remember these are only projections and should not be taken as guarantees or financial advice.
-        </p>
+                    
                     {donationType === "fixed" ? (
                         <div>
                             <label>Annual Donation Amount</label>

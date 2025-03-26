@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { getToken, setToken } from '../../utils/auth';
+import { setToken } from '../../utils/auth';
 
-const Login = () => {
+const Login = ({ onLogIn, token }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [justLoggedIn, setJustLoggedIn] = useState(false); 
-    const userToken = getToken();
     const navigate = useNavigate();
     
     useEffect(() => {
-        if (userToken && !justLoggedIn) { 
+        if (token && !justLoggedIn) { 
             alert("You are currently logged in.");
             navigate("/portfolio");
         }
-    }, [userToken, navigate, justLoggedIn]);
+    }, [token, navigate, justLoggedIn]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,6 +27,7 @@ const Login = () => {
             } else if (response.data?.token) {
                 const { token } = response.data;
                 setToken(token);
+                onLogIn(token);
                 setMessage("Log in successful.");
                 setJustLoggedIn(true);
                 navigate("/portfolio");

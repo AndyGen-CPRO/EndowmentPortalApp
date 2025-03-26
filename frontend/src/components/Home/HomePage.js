@@ -9,11 +9,11 @@ const Home = () => {
     <div>
       <div>
         <h1>Welcome to the Donor Portal</h1>
-        <p>Please register or log in to continue</p>
         <div>
           {/* Hides register and log in buttons if logged in */}
           {!token ? (
             <>
+              <p>Please register or log in to continue</p>
               <Link to="/register">
                 <button>Register</button>
               </Link>
@@ -22,9 +22,12 @@ const Home = () => {
               </Link>
             </>
           ) : (
-            <Link to="/portfolio">
-              <button>Continue to your Endowment Portfolio</button>
-            </Link>
+            <>
+              <p>You are currently logged in.</p>
+              <Link to="/portfolio">
+                <button>Continue to your Endowment Portfolio</button>
+              </Link>
+            </>
           )}
         </div>
       </div>
