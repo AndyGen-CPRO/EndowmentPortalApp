@@ -124,7 +124,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         }
     };
 
-    const handleDonationSubmit = async (e) => {
+    const handleDonationCreate = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
@@ -197,11 +197,10 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                         <p className="pledge-detail">Status: {pledge.status}</p>
                         <p>Pledge Start Date: {new Date(pledge.pledgeStart).getFullYear()}</p>
                         <p>Pledge End Date: {new Date(pledge.pledgeEnd).getFullYear()}</p>
-                        <p className="pledge-detail">Donation Type: {pledge.donationType}</p>
 
                         <button onClick={editBtn}>Edit Pledge</button>
                         <button onClick={() => setAddDonationBtn(!addDonationBtn)}>Add Donation</button>
-                        <button className="close-btn" onClick={() => closeModal(false)}>Close</button>
+                        <button onClick={() => closeModal(false)}>Close</button>
 
                         {addDonationBtn && (
                             <div>
@@ -235,7 +234,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                                                     required
                                                 />
                                                 <button className="save-btn" onClick={() => handleDonationUpdate(donation._id)}>Save</button>
-                                                <button className="cancel-btn" onClick={handleDonationCancel}>Cancel</button>
+                                                <button className="cancel-btn" onClick={() => setEditDonationId(null)}>Cancel</button>
                                             </div>
                                         ) : (
                                             <div className="pledge-donations">

@@ -27,13 +27,14 @@ const createDonation = async (req,res) => {
 
 const createDonations = async (endowmentPledgeId, donations) => {
     try {
+        console.log(donations)
         const newDonations = [];
 
         for (let i = 0; i < donations.length; i++) {
             const { donationDate, amount } = donations[i];
 
             newDonations.push({
-                donationDate: new Date(i.donationDate),
+                donationDate,
                 amount,
                 endowmentPledgeId
             })
