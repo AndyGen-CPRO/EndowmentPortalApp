@@ -156,3 +156,20 @@ input {
 .pledge-donations button {
   margin-left:10px;
 }
+
+.close-modal {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 0px 10px;
+  border: 0;
+  cursor: pointer;
+  font-size: 30px;
+  background: #226442;
+  color: rgb(215, 216, 222);
+}
+
+.close-modal:hover {
+  background: rgb(215, 216, 222);
+  color: #226442;
+}

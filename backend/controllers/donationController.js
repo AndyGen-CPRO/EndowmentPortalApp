@@ -103,6 +103,10 @@ const deleteDonation = async (req,res) => {
     }
 };
 
+const deleteAllDonations = async (endowmentPledgeId) => {
+    
+}
+
 module.exports = {
     createDonation,
     createDonations,

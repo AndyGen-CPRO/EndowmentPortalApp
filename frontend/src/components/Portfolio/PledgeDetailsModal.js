@@ -193,6 +193,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
     return (
         <div className="modal-overlay">
             <div className="modal-content">
+                <button className='close-modal' onClick={() => closeModal(false)}>&times;</button>
                 {!editMode ? (
                     <div>
                         <h2>{pledge.beneficiaryName}</h2>
@@ -204,7 +205,6 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
 
                         <button onClick={editBtn}>Edit Pledge</button>
                         <button onClick={() => setConfirmDeleteModal(true)}>Delete Pledge</button>
-                        <button onClick={() => closeModal(false)}>Close</button>
 
                         {/* Pledge Delete Confirmation Modal */}
                         {confirmDeleteModal && (
