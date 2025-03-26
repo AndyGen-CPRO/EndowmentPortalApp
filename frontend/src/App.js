@@ -7,6 +7,7 @@ import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Portfolio from './components/Portfolio/PortfolioPage';
 import AddPledge from './components/Portfolio/AddPledgePage';
+import EndowmentCalculator from './components/Portfolio/EndowmentCalculator';
 
 function App() {
   return (
