@@ -18,6 +18,36 @@
 .back-button:hover {
   background-color: #00b345;
 }
+.new-pledge-button {
+  background-color: #f0f0f0;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-pledge-button:hover {
+  background-color: green;
+  color: white;
+}
+
+.details-button {
+  background-color: #f0f0f0;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: green;
+  color: white;
+}
+
 
 
 .endowment-form {
