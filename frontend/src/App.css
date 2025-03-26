@@ -132,9 +132,10 @@ input {
   padding: 14px 28px;
   border-radius: 3px;
   max-width: 600px;
-  min-width: 300px;
+  min-width: 400px;
   z-index: 1;
   overflow-y: auto;
+  max-height: 80%;
 }
 
 .pledge-detail {
@@ -143,8 +144,15 @@ input {
 
 .pledge-donations {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pledge-donations p {
+  margin: 0;
+  flex-grow: 1; 
 }
 
 .pledge-donations button {
-  text-align: right;
+  margin-left:10px;
 }

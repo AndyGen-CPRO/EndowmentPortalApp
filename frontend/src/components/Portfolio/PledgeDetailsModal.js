@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
+import PledgeDelete  from './PledgeDeleteModal';
 
 const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => {
     const [editMode, setEditMode] = useState(false);
+    const [confirmDeleteModal, setConfirmDeleteModal] = useState(false)
     const [endowmentPledge, setEndowmentPledge] = useState(null);
     const [beneficiaryName, setBeneficiaryName] = useState("");
     const [donationPurpose, setDonationPurpose] = useState("");
@@ -19,6 +21,8 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
     const [donationYears, setDonationYears] = useState([]);
 
     const [addDonationBtn, setAddDonationBtn] = useState(false);
+    const [newDonationYear, setNewDonationYear] = useState(null);
+    const [newDonationAmount, setNewDonationAmount] = useState(0);
 
     const [editDonationId, setEditDonationId] = useState(null); 
     const [editAmount, setEditAmount] = useState(0); 
@@ -79,7 +83,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         e.preventDefault();
         try {
             const response = await axios.delete(
-                `http://localhost:5000/endowment-pledge/${pledge._id}/`
+                `http://localhost:5000/endowment-pledges/${pledge._id}/`
                 , {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -130,11 +134,15 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
             const response = await axios.post(
                 `http://localhost:5000/endowment-pledge/${pledge._id}/donations/create`
                 , {
+                    donationDate: newDonationYear,
+                    amount: newDonationAmount
+                }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
             fetchDonations();
+            setNewDonationYear(null)
             setAddDonationBtn(false);
             setMessage("Donation creation successful.");
         } catch (error) {
@@ -164,10 +172,6 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         } catch (error) {
             setMessage("Donation update failed.")
         }
-    };
-    
-    const handleDonationCancel = () => {
-        setEditDonationId(null);
     };
 
     const handleDonationDelete = async (donationId) => {
@@ -199,27 +203,52 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                         <p>Pledge End Date: {new Date(pledge.pledgeEnd).getFullYear()}</p>
 
                         <button onClick={editBtn}>Edit Pledge</button>
-                        <button onClick={() => setAddDonationBtn(!addDonationBtn)}>Add Donation</button>
+                        <button onClick={() => setConfirmDeleteModal(true)}>Delete Pledge</button>
                         <button onClick={() => closeModal(false)}>Close</button>
 
-                        {addDonationBtn && (
-                            <div>
-                                <label>Year: </label>
-                                <DatePicker
-                                    onChange={(date) => setPledgeStart(date)}
-                                    showYearPicker
-                                    dateFormat="yyyy"
-                                    minDate={pledge.pledgeStart}
-                                    maxDate={pledge.pledgeEnd}
-                                    filterDate={(date) => !donationYears.includes(date.getFullYear())}
-                                    onKeyDown={(e) => {
-                                        e.preventDefault();
-                                        }}
-                                />
-                            </div>
+                        {/* Pledge Delete Confirmation Modal */}
+                        {confirmDeleteModal && (
+                            <PledgeDelete 
+                            onConfirm={handlePledgeDelete}
+                            onCancel={() => setConfirmDeleteModal(false)}
+                            />
                         )}
 
                         <h3>Donations</h3>
+                        <button onClick={() => setAddDonationBtn(!addDonationBtn)}>Add Donation</button>
+                        {addDonationBtn && (
+                            <form onSubmit={handleDonationCreate}>
+                                <div>
+                                    <label>Year: </label>
+                                    <DatePicker
+                                        selected={newDonationYear}
+                                        onChange={(date) => 
+                                            {const convDate = new Date(date.getFullYear(), 0, 1);
+                                             setNewDonationYear(convDate.toISOString())}
+                                        }
+                                        showYearPicker
+                                        dateFormat="yyyy"
+                                        minDate={pledge.pledgeStart}
+                                        maxDate={pledge.pledgeEnd}
+                                        filterDate={(date) => !donationYears.includes(date.getFullYear())}
+                                        onKeyDown={(e) => {
+                                            e.preventDefault();
+                                            }}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Amount</label>
+                                    <input
+                                        type="text"
+                                        value={"$" + newDonationAmount}
+                                        onChange={(e) => setNewDonationAmount(Number(e.target.value.replace(/\D/g, '')))}
+                                        min={0}
+                                        required 
+                                    />
+                                </div>
+                                <button type="submit">Add</button>
+                            </form>
+                        )}
                         {donations.length > 0 ? (
                             <ul>
                                 {donations.map((donation) => (

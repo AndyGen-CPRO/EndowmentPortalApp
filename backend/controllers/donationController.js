@@ -5,7 +5,7 @@ const createDonation = async (req,res) => {
         const { donationDate, amount } = req.body;
         const { endowmentPledgeId } = req.params;
 
-        const existingDonation = Donation.findOne({ endowmentPledgeId, donationDate });
+        const existingDonation = await Donation.findOne({ endowmentPledgeId, donationDate });
 
         if (existingDonation) {
             return res.status(400).json({ message: "Donation for this year already exists." })
