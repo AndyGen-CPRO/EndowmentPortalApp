@@ -42,7 +42,7 @@ const Portfolio = () => {
         <div>
             <h1>Endowment Portfolio</h1>
 
-            <button onClick={createEndowmentPledge}>New Pledge</button>
+            <button className="new-pledge-button" onClick={createEndowmentPledge}>New Pledge</button>
 
             <h3>Your Pledges</h3>
             {message && <p>{message}</p>}
@@ -59,7 +59,7 @@ const Portfolio = () => {
                                         <label>Status:</label> {pledge.status} --- 
                                         <label>Pledge Period:</label> {new Date(pledge.pledgeStart).getFullYear()} - {new Date(pledge.pledgeEnd).getFullYear()} 
                                     </span>
-                                    <button onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>Details</button>
+                                    <button  className="details-button" onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>Details</button>
                                 </ul>
                             ))}
                         </div>
