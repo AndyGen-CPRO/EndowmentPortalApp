@@ -21,14 +21,23 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        // Password rule: min 8 chars, at least 1 uppercase, 1 lowercase, 1 digit, 1 special char
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    
+        if (!passwordRegex.test(password)) {
+            setMessage("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
+            return;
+        }
+    
         try {
             const response = await axios.post("http://localhost:5000/auth/register", { displayName, email, password });
             alert("Register successful.");
             navigate("/login");
         } catch (error) {
             if (error.response) {
-                const {status, data} = error.response;
-                switch (status){
+                const { status, data } = error.response;
+                switch (status) {
                     case 400:
                         setMessage('Bad request: ' + data.message);
                         break;
@@ -49,13 +58,14 @@ const Register = () => {
         }
     };
     
+    
     return (
         <div>
             <div className='register-page'>
                 <h2>Register</h2>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label>Display Name</label>
+                    <label style={{ color: "green" }}>Display Name</label>
                         <input
                             type="text"
                             value={displayName}
@@ -64,16 +74,25 @@ const Register = () => {
                         />
                     </div>
                     <div>
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
+                    <label style={{ color: "green" }}>Email</label>
+
+                    <p style={{ fontSize: '0.9rem', color: '#666' }}>
+                        Example: name@example.com
+                    </p>
+                    <input
+                        type="email"
+                        placeholder="e.g. antoinette@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
                     <div>
-                        <label>Password</label>
+                    <label style={{ color: "green" }}>Password</label>
+                        <p style={{ fontSize: '0.9rem', color: '#666' }}>
+    Password must be at least 8 characters, include uppercase, lowercase, number, and special character.
+</p>
+
                         <input
                             type="password"
                             value={password}

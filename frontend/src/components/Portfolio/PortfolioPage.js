@@ -38,28 +38,48 @@ const Portfolio = () => {
         navigate("/add-pledge")
     }
 
+    if (!token) {
+        return (
+            <p>Loading Endowments...</p>
+        )
+    }
+
     return (
         <div>
             <h1>Endowment Portfolio</h1>
 
-            <button onClick={createEndowmentPledge}>New Pledge</button>
+            <button  className="new-pledge-button" onClick={createEndowmentPledge}>New Pledge</button>
 
             <h3>Your Pledges</h3>
             {message && <p>{message}</p>}
             <div>
                 {pledges.length > 0 ? (
-                        <div>
+                        <div className='pledges-container'>
                             {pledges.map((pledge) => (
-                                <ul key={pledge.id}>
-                                    <h4>{
+                                <ul key={pledge.id} className='endowment-pledges'>
+                                    <h4 className='pledge-list-title'>{
                                         pledge.beneficiaryName}
                                     </h4>
-                                    <span>
-                                        <label>Purpose:</label> {pledge.donationPurpose} ---
-                                        <label>Status:</label> {pledge.status} --- 
-                                        <label>Pledge Period:</label> {new Date(pledge.pledgeStart).getFullYear()} - {new Date(pledge.pledgeEnd).getFullYear()} 
+                                    <span className='pledge-list-details'>
+                                        <div>
+                                            <label>Purpose</label> 
+                                            <span>{pledge.donationPurpose}</span>
+                                        </div>
+
+                                        <div>
+                                            <label>Status</label> 
+                                            <span>{pledge.status}</span>
+                                        </div>
+
+                                        <div>
+                                            <label>Pledge Period</label> 
+                                            <span>{new Date(pledge.pledgeStart).getFullYear()} - {new Date(pledge.pledgeEnd).getFullYear()} </span>
+                                        </div>
+                                        
+                                        <button className="details-button" onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>
+                                            DETAILS
+                                        </button>
                                     </span>
-                                    <button onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>Details</button>
                                 </ul>
                             ))}
                         </div>

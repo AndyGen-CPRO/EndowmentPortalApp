@@ -14,6 +14,37 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.new-pledge-button {
+  background-color: #f0f0f0;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-pledge-button:hover {
+  background-color: green;
+  color: white;
+}
+
+.details-button {
+  background-color: #024c40;
+  color: white;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 12px;
+}
+
+.details-button:hover {
+  background-color: green;
+  color: white;
+}
+
 
 .back-button:hover {
   background-color: #00b345;
@@ -107,6 +138,20 @@ input {
   gap: 10px; 
 }
 
+.menu-btns button {
+  all: unset;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-weight: bold;
+  border-right: 0.5px solid black;
+  border-left: 0.5px solid black;
+  padding: 0px 10px;
+  color: black;
+}
+ .menu-btns button:hover {
+  color:#656565
+ }
+
 .modal, .modal-overlay {
   width: 100%;
   height: 100%;
@@ -175,4 +220,149 @@ input {
 .close-modal:hover {
   background: rgb(215, 216, 222);
   color: #226442;
+}
+.edit-btn {
+  background-color: #28a745; /* Green */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn {
+  background-color: #dc3545; /* Red */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.save-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #0069d9;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+
+.endowment-pledges {
+  border: 3px dashed black;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.endowment-pledges:hover {
+  background-color: #649f9c;
+  color: white;
+  transform: scale(1.05);
+}
+
+.pledge-list-title {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 24px;
+  text-decoration: underline;
+  padding: 10px;
+  display: inline-block;
+  border: 2px solid #024c40;
+  margin-top:1%;
+  border-radius: 12px;
+}
+
+.pledge-list-details {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.pledge-list-details div {
+  display: flex;
+  flex-direction: column;
+  text-align: center; 
+  position: relative;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding:15px;
+  min-width: 120px;
+}
+
+.pledge-list-details label {
+  border: 1px solid black;
+  padding: 5px;
+  position: absolute;
+  transform: translateY(-110%) translateX(-20%);
+  background-color: #024c40;
+  color: white;
+  border-radius: 12px;
+}
+
+.pledge-list-details span {
+  padding: 0px 10px 10px 10px;
+}
+
+.pledges-container {
+  background-color: #ebebeb;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .form-content {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .endowment-form, .endowment-result {
+      width: 100%;
+  }
+
+  .tooltip .investment-tooltip {
+      left: 50%;
+      transform: translateX(-50%);
+      margin-left: 0;
+  }
+
+  .App {
+    margin: 0;
+  }
+
+  .pledge-list-details {
+    display: flex;
+    flex-direction: column;
+  }
 }

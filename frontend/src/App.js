@@ -5,9 +5,12 @@ import Home from './components/Home/HomePage';
 import Navbar from './components/Nav/NavBar';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
+import ResetPassword from './components/Auth/ResetPassword';
+import ForgotPassword from './components/Auth/ForgotPassword';
 import Portfolio from './components/Portfolio/PortfolioPage';
 import AddPledge from './components/Portfolio/AddPledgePage';
 import EndowmentCalculator from './components/EndowmentCalculator/EndowmentCalculatorPage';
+
 import { getToken, removeToken } from './utils/auth';
 
 function App() {
@@ -39,7 +42,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/login" element={<Login onLogIn={handleLogIn} token={userToken} />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/add-pledge" element={<AddPledge />} />
             <Route path="/endowment-calculator" element={<EndowmentCalculator />} />
