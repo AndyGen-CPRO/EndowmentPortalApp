@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const AddPledge = () => {
     const [beneficiaryName, setBeneficiaryName] = useState("");
     const [donationPurpose, setDonationPurpose] = useState("");
+    const [customPurpose, setCustomPurpose] = useState("");
     const [status, setStatus] = useState("on-going");
     const [pledgeStart, setPledgeStart] = useState(new Date());
     const [pledgeEnd, setPledgeEnd] = useState(new Date());
@@ -15,28 +16,29 @@ const AddPledge = () => {
     const [fixedAmount, setFixedAmount] = useState(0);
     const [donorMessage, setDonorMessage] = useState("");
     const [donations, setDonations] = useState([]);
-
     const [message, setMessage] = useState("");
+
     const token = getToken();
     const navigate = useNavigate();
+
     useEffect(() => {
         if (!token) {
             navigate("/login");
-            alert("This page needs authorization to be accessed.")
-            return;
+            alert("This page needs authorization to be accessed.");
         }
-    });
+    }, [token, navigate]);
 
     useEffect(() => {
         if (pledgeStart && pledgeEnd) {
             const startYear = pledgeStart.getFullYear();
             const endYear = pledgeEnd.getFullYear();
             if (startYear <= endYear) {
-                const newDonations = []
+                const newDonations = [];
                 for (let year = startYear; year <= endYear; year++) {
-                    newDonations.push({ 
-                        donationDate: new Date(year, 0, 1).toISOString(), 
-                        amount: donationType === "fixed" ? fixedAmount : 0 });
+                    newDonations.push({
+                        donationDate: new Date(year, 0, 1).toISOString(),
+                        amount: donationType === "fixed" ? fixedAmount : 0
+                    });
                 }
                 setDonations(newDonations);
             }
@@ -51,10 +53,12 @@ const AddPledge = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const finalPurpose = donationPurpose === "Other" ? customPurpose : donationPurpose;
+
         try {
             const response = await axios.post("http://localhost:5000/endowment-pledges/create", {
                 beneficiaryName,
-                donationPurpose,
+                donationPurpose: finalPurpose,
                 status,
                 pledgeStart,
                 pledgeEnd,
@@ -67,12 +71,12 @@ const AddPledge = () => {
                 },
                 withCredentials: true,
             });
-            setMessage("Pledge created successfully.")
-            navigate("/portfolio")
+            setMessage("Pledge created successfully.");
+            navigate("/portfolio");
         } catch (error) {
             setMessage(error.message);
         }
-    }
+    };
 
     return (
         <div>
@@ -85,17 +89,33 @@ const AddPledge = () => {
                 </div>
 
                 <div>
-                    <label>Donation Purpose (Emerging Needs, Community Needs, etc...)</label>
-                    <input type="text" onChange={(e) => setDonationPurpose(e.target.value)} required />
-                </div>
-
-                <div>
-                    <label>Status: </label>
-                    <select onChange={(e) => setStatus(e.target.value)} selected="on-going">
-                        <option value="on-going">On-going</option>
-                        <option value="complete">Complete</option>
-                        <option value="cancelled">Cancelled</option>
+                    <label>Donation Purpose</label>
+                    <select onChange={(e) => setDonationPurpose(e.target.value)} required>
+                        <option value="">-- Select Purpose --</option>
+                        <option value="Education Support">Education Support</option>
+                        <option value="Medical & Health Aid">Medical & Health Aid</option>
+                        <option value="Emergency & Disaster Relief">Emergency & Disaster Relief</option>
+                        <option value="Food & Nutrition">Food & Nutrition</option>
+                        <option value="Shelter & Housing">Shelter & Housing</option>
+                        <option value="Religious & Faith-Based">Religious & Faith-Based</option>
+                        <option value="Community Development">Community Development</option>
+                        <option value="Youth & Children Services">Youth & Children Services</option>
+                        <option value="Environmental Causes">Environmental Causes</option>
+                        <option value="Animal Welfare">Animal Welfare</option>
+                        <option value="Other">Other</option>
                     </select>
+
+                    {donationPurpose === "Other" && (
+                        <div style={{ marginTop: '10px' }}>
+                            <label>Custom Purpose</label>
+                            <input
+                                type="text"
+                                onChange={(e) => setCustomPurpose(e.target.value)}
+                                required
+                                placeholder="Enter your custom purpose"
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div>
@@ -106,12 +126,10 @@ const AddPledge = () => {
                         showYearPicker
                         dateFormat="yyyy"
                         maxDate={pledgeEnd}
-                        onKeyDown={(e) => {
-                            e.preventDefault();
-                         }}
+                        onKeyDown={(e) => e.preventDefault()}
                     />
                 </div>
-                
+
                 <div>
                     <label>Pledge End Year: </label>
                     <DatePicker
@@ -120,9 +138,7 @@ const AddPledge = () => {
                         showYearPicker
                         dateFormat="yyyy"
                         minDate={pledgeStart}
-                        onKeyDown={(e) => {
-                            e.preventDefault();
-                         }}
+                        onKeyDown={(e) => e.preventDefault()}
                     />
                 </div>
 
@@ -133,15 +149,14 @@ const AddPledge = () => {
 
                 <div>
                     <label>Donation Type: </label>
-                    <select onChange={(e) => setDonationType(e.target.value)} selected="fixed">
+                    <select onChange={(e) => setDonationType(e.target.value)} value={donationType}>
                         <option value="fixed">Fixed Annual Donations</option>
                         <option value="custom">Custom Annual Donations</option>
                     </select>
                 </div>
 
                 <div>
-                    <h2>Donation Details</h2>  
-                    
+                    <h3>Donation Details</h3>
                     {donationType === "fixed" ? (
                         <div>
                             <label>Annual Donation Amount</label>
@@ -150,7 +165,7 @@ const AddPledge = () => {
                                 value={"$" + fixedAmount}
                                 onChange={(e) => setFixedAmount(Number(e.target.value.replace(/\D/g, '')))}
                                 min={0}
-                                required 
+                                required
                             />
                         </div>
                     ) : (
@@ -163,7 +178,7 @@ const AddPledge = () => {
                                             <input
                                                 type="text"
                                                 value={"$" + donation.amount}
-                                                onChange={(e) => handleDonationChange(i, Number(e.target.value.replace(/\D/g, '')).toString())}
+                                                onChange={(e) => handleDonationChange(i, Number(e.target.value.replace(/\D/g, '')))}
                                                 min={0}
                                                 required
                                             />
@@ -178,7 +193,8 @@ const AddPledge = () => {
                 <button type="submit">Submit</button>
             </form>
         </div>
-    )
-}
+    );
+};
 
 export default AddPledge;
+
