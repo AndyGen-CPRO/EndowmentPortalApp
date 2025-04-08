@@ -85,7 +85,7 @@ const PledgeDataCalculator = () => {
             <p>Endowing a donation of ${totalPledgeAmount} over a {pledgePeriod}-year period can be seen in the illustration below.</p>
             <ul>
             <li>
-                The ${totalPledgeAmount} commitment is made up of {pledgePeriod} {donationType === "fixed" ? `fixed annual payment(s) of $${displayAnnualAmount}` : "custom annual payment(s)"}.
+                The ${totalPledgeAmount} commitment is made up of {donations.length} {donationType === "fixed" ? `fixed payment(s) of $${displayAnnualAmount}` : "custom payment(s)"}.
             </li>
             <li>Your donation will be invested with an approximate rate of return of {roiPercentage}% (not guaranteed).</li>
             <li>Approximately {disbursementFee}% will be available for disbursement to a qualified donee (charity of choice).</li>
@@ -134,6 +134,7 @@ const PledgeDataCalculator = () => {
     return (
         <div className="container">
         <h1>Endowment Calculator</h1>
+        <button  className="proceed-button" onClick={() => navigate("/portfolio")}>Return to Portfolio</button>
         <div class="form-description">
             <p>
                 You can support the Community Foundation of Central Alberta, your community or charity of choice by establishing an 

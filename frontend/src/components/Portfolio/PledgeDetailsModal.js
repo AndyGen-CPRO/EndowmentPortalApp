@@ -43,19 +43,9 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         }
     }, [pledge]);
 
-    const fetchEndowmentPledge = async() => {
-        try {
-            const response = await axios.get(`http://localhost:5000/endowment-pledges/${pledge._id}/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setEndowmentPledge(response.data);
-            console.log(response.data)
-        } catch (error) {
-            setMessage(error);
-        }
-    }    
+    const refreshData = async () => {
+        fetchEndowmentPledges();
+    }
 
     const handlePledgeUpdate = async(e) => {
         e.preventDefault();
@@ -74,8 +64,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 withCredentials: true,
             });
             setEditMode(!editMode);
-            fetchEndowmentPledge();
-            fetchEndowmentPledges();
+            refreshData();
             setMessage("Pledge update successful.")
         } catch (error) {
             setMessage("Pledge update failed.")
@@ -144,8 +133,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 }
             });
             fetchDonations();
-            fetchEndowmentPledge();
-            fetchEndowmentPledges();
+            refreshData();
             setNewDonationYear(null)
             setAddDonationBtn(false);
             setMessage("Donation creation successful.");
@@ -155,13 +143,11 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
     };
 
     const handleDonationEdit = (donation) => {
-        console.log(donation)
         setEditDonationId(donation._id);
         setEditAmount(donation.amount);
     };
 
     const handleDonationUpdate = async (donationId) => {
-        console.log(editAmount)
         try {
             const response = await axios.put(
                 `http://localhost:5000/endowment-pledge/${pledge._id}/donation/${donationId}`
@@ -171,7 +157,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 }
             });
             fetchDonations();
-            fetchEndowmentPledges();
+            refreshData();
             setEditDonationId(null);
             setMessage("Donation update successful.")
         } catch (error) {
@@ -189,7 +175,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 }
             });
             fetchDonations();
-            fetchEndowmentPledges();
+            refreshData();
             setMessage("Donation delete successful.")
         } catch (error) {
             setMessage("Donation delete failed.")
@@ -209,10 +195,6 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                         <p>Pledge End Date: {new Date(pledgeEnd).getFullYear()}</p>
 
                         <button onClick={editBtn}>Edit Pledge</button>
-
-                        <button onClick={() => navigate("/pledge-data-calculator", { state: { pledge, donations }})}>
-                            View in Calculator
-                        </button>
 
                         <button onClick={() => setConfirmDeleteModal(true)}>Delete Pledge</button>
 

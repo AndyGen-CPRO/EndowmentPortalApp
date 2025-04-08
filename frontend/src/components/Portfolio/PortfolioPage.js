@@ -10,7 +10,7 @@ const Portfolio = () => {
     const [message, setMessage] = useState();
     const [pledges, setPledges] = useState([]);
     const [pledgeModal, setPledgeModal] = useState(false);
-    const [selectedPledge, setSelectedPledge] = useState(null)
+    const [selectedPledge, setSelectedPledge] = useState(null);
 
     useEffect(() => {
         if (token) { //fetches all user pledges if theres token
@@ -34,6 +34,24 @@ const Portfolio = () => {
         }
     };
 
+    const fetchDonationsData = async (pledge) => {
+        try {
+            const response = await axios.get(
+                `http://localhost:5000/endowment-pledge/${pledge._id}/donations/`
+                , {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const donationsData = response.data
+            setMessage("Fetching pledge donations successful.")
+
+            return donationsData;
+        } catch (error) {
+            setMessage("Error fetching donatiosn.")
+        }
+    };
+
     const createEndowmentPledge = () => {
         navigate("/add-pledge")
     }
@@ -48,7 +66,7 @@ const Portfolio = () => {
         <div>
             <h1>Endowment Portfolio</h1>
 
-            <button  className="new-pledge-button" onClick={createEndowmentPledge}>New Pledge</button>
+            <button  className="proceed-button" onClick={createEndowmentPledge}>New Pledge</button>
 
             <h3>Your Pledges</h3>
             {message && <p>{message}</p>}
@@ -76,9 +94,20 @@ const Portfolio = () => {
                                             <span>${pledge.totalDonation.toLocaleString()}</span>
                                         </div>
                                         
-                                        <button className="details-button" onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>
-                                            DETAILS
-                                        </button>
+                                        <div className="action-btns">
+                                            <button onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>
+                                                View Details
+                                            </button>
+                                            
+                                            <button onClick={async () =>{
+                                                const donations = await fetchDonationsData(pledge)
+
+                                                navigate("/pledge-data-calculator", 
+                                                { state: { pledge, donations }}
+                                                )}}>
+                                                View in Calculator
+                                            </button>
+                                        </div>
                                     </span>
                                 </ul>
                             ))}

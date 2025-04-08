@@ -19,7 +19,7 @@
   cursor: pointer;
 }
 
-.new-pledge-button {
+.proceed-button {
   background-color: #f0f0f0;
   color: black;
   border: 1px solid #ccc;
@@ -29,58 +29,32 @@
   transition: background-color 0.3s ease;
 }
 
-.new-pledge-button:hover {
-  background-color: green;
-  color: white;
-}
-
-.details-button {
+.proceed-button:hover {
   background-color: #024c40;
   color: white;
-  border: 1px solid #ccc;
-  padding: 6px 12px;
-  margin-top: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: 12px;
 }
-
-.details-button:hover {
-  background-color: green;
-  color: white;
-}
-
 
 .back-button:hover {
   background-color: #00b345;
 }
-.new-pledge-button {
-  background-color: #f0f0f0;
-  color: black;
-  border: 1px solid #ccc;
-  padding: 8px 14px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+
+.action-btns {
+  background-color: #024c40;
 }
 
-.new-pledge-button:hover {
-  background-color: green;
-  color: white;
-}
-
-.details-button {
+.action-btns button {
   background-color: #f0f0f0;
   color: black;
   border: 1px solid #ccc;
   padding: 6px 12px;
   margin-top: 8px;
   cursor: pointer;
+  border-radius: 7px;
   transition: background-color 0.3s ease;
 }
 
-.details-button:hover {
-  background-color: green;
+.action-btns button:hover {
+  background-color: #024c40;
   color: white;
 }
 
@@ -398,7 +372,6 @@ input[type="radio"] {
   background-color: #5a6268;
 }
 
-
 .endowment-pledges {
   border: 3px dashed black;
   border-radius: 12px;
@@ -425,7 +398,7 @@ input[type="radio"] {
 
 .pledge-list-details {
   display: flex;
-  gap: 50px;
+  gap: 11%;
   align-items: center;
   margin-bottom: 10px;
   text-transform: capitalize;
@@ -513,5 +486,9 @@ input[type="radio"] {
   .pledge-list-details {
     display: flex;
     flex-direction: column;
+  }
+
+  .pledge-list-details div {
+    margin-bottom: 20%;
   }
 }

@@ -10,6 +10,22 @@ const updateTotalDonation = async (endowmentPledgeId) => {
     })
 };
 
+const updateDonationType = async (endowmentPledgeId) => {
+    const donations = await Donation.find({ endowmentPledgeId });
+
+    const amounts = donations.map(d => Number(d.amount || 0));
+
+    const firstDonation = amounts[0];
+
+    const isAllEqual = amounts.every(a => a === firstDonation);
+
+    const newDonationType = isAllEqual ? "fixed" : "custom";
+
+    await EndowmentPledge.findByIdAndUpdate(endowmentPledgeId, {
+        donationType: newDonationType
+    })
+}
+
 const createDonation = async (req,res) => {
     try {
         const { donationDate, amount } = req.body;
@@ -29,6 +45,7 @@ const createDonation = async (req,res) => {
 
         await newDonation.save();
         await updateTotalDonation(endowmentPledgeId);
+        await updateDonationType(endowmentPledgeId);
 
         res.status(201).json({ message: "Donation creation successful." })
     } catch (error) {
@@ -97,6 +114,7 @@ const updateDonation = async (req,res) => {
         if (!donation) return res.status(404).json({ message: "Donation not found." })
 
         await updateTotalDonation(donation.endowmentPledgeId);
+        await updateDonationType(donation.endowmentPledgeId);
 
         res.status(200).json({ message: "Donation update successful.", donation })
     } catch (error) {
@@ -113,6 +131,7 @@ const deleteDonation = async (req,res) => {
         if (!donation) return res.status(404).json({ message: "Donation not found." })
 
         await updateTotalDonation(donation.endowmentPledgeId); 
+        await updateDonationType(donation.endowmentPledgeId);
 
         res.status(200).json({ message: "Donation deletion successful." })
     } catch (error) {

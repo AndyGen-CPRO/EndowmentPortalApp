@@ -82,6 +82,7 @@ const AddPledge = () => {
         <div>
             <h2>New Pledge</h2>
             {message && <p>{message}</p>}
+            <button className="proceed-button" onClick={() => navigate("/portfolio")}>Return to Portfolio</button>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Recipient Organization</label>
