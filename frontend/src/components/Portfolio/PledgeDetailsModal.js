@@ -63,7 +63,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 },
                 withCredentials: true,
             });
-            setEditMode(!editMode);
+            closeModal(true);
             refreshData();
             setMessage("Pledge update successful.")
         } catch (error) {
