@@ -84,7 +84,7 @@ const AddPledge = () => {
             {message && <p>{message}</p>}
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Beneficiary Name</label>
+                    <label>Recipient Organization</label>
                     <input type="text" onChange={(e) => setBeneficiaryName(e.target.value)} required />
                 </div>
 

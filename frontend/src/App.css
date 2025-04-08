@@ -212,6 +212,12 @@ input[type="radio"] {
   color:#656565
  }
 
+ .menu-btns button:disabled {
+  background-color: #adaaaa;
+  border-radius: 7px;
+  padding: 0px 10px
+ }
+
 .modal, .modal-overlay {
   width: 100%;
   height: 100%;

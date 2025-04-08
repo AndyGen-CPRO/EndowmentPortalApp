@@ -48,7 +48,8 @@ const PledgeDataCalculator = () => {
         for (let year = 1; year <= displayGrowth; year++) {
         if (year === 1) {
             const firstDonation = donationAmounts[0] || 0;
-            results.push({ year, balance: firstDonation.toFixed(2), donationImpact: 0 });
+            results.push({ year, balance: firstDonation.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}),
+             donationImpact: 0 });
             balance += firstDonation;
             continue;
         }
@@ -66,8 +67,8 @@ const PledgeDataCalculator = () => {
 
         results.push({
             year,
-            balance: balance.toFixed(2),
-            donationImpact: disbursement.toFixed(2),
+            balance: balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}),
+            donationImpact: disbursement.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}),
         });
         }
 
@@ -148,7 +149,12 @@ const PledgeDataCalculator = () => {
             <div className="endowment-form">
 
                 <div className="form-div">
-                    <label className="form-label">Pledge Years</label>
+                    <label className="form-label">Recipient Organization</label>
+                    <span>{pledge.beneficiaryName}</span>
+                </div>
+
+                <div className="form-div">
+                    <label className="form-label">Pledge Period</label>
                     <span>{new Date(pledge.pledgeStart).getFullYear()} - {new Date(pledge.pledgeEnd).getFullYear()}</span>
                 </div>
                 
@@ -157,7 +163,7 @@ const PledgeDataCalculator = () => {
                     <ul>
                         {donations.map((donation) => (
                             <li key={donation.year}>
-                                {new Date(donation.donationDate).getFullYear()}: {donation.amount}
+                                {new Date(donation.donationDate).getFullYear()}: ${donation.amount.toLocaleString()}
                             </li>
                         ))}
                     </ul>
