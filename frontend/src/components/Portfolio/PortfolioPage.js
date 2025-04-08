@@ -67,13 +67,13 @@ const Portfolio = () => {
                                         </div>
 
                                         <div>
-                                            <label>Status</label> 
-                                            <span>{pledge.status}</span>
-                                        </div>
-
-                                        <div>
                                             <label>Pledge Period</label> 
                                             <span>{new Date(pledge.pledgeStart).getFullYear()} - {new Date(pledge.pledgeEnd).getFullYear()} </span>
+                                        </div>
+                                        
+                                        <div>
+                                            <label>Total Donation Amount</label> 
+                                            <span>${pledge.totalDonation.toLocaleString()}</span>
                                         </div>
                                         
                                         <button className="details-button" onClick={() => {setPledgeModal(true); setSelectedPledge(pledge)}}>

@@ -1,4 +1,14 @@
 const Donation = require('../models/donationModel');
+const EndowmentPledge = require('../models/endowmentPledgeModel')
+
+const updateTotalDonation = async (endowmentPledgeId) => {
+    const donations = await Donation.find({ endowmentPledgeId });
+    const newTotal = donations.reduce((sum, donation) => sum + Number(donation.amount || 0), 0);
+
+    await EndowmentPledge.findByIdAndUpdate(endowmentPledgeId, {
+        totalDonation: newTotal
+    })
+};
 
 const createDonation = async (req,res) => {
     try {
@@ -18,6 +28,7 @@ const createDonation = async (req,res) => {
         });
 
         await newDonation.save();
+        await updateTotalDonation(endowmentPledgeId);
 
         res.status(201).json({ message: "Donation creation successful." })
     } catch (error) {
@@ -84,6 +95,9 @@ const updateDonation = async (req,res) => {
         );
         
         if (!donation) return res.status(404).json({ message: "Donation not found." })
+
+        await updateTotalDonation(donation.endowmentPledgeId);
+
         res.status(200).json({ message: "Donation update successful.", donation })
     } catch (error) {
         res.status(400).json({ message: "Error updating donation.", error })
@@ -97,6 +111,9 @@ const deleteDonation = async (req,res) => {
         );
 
         if (!donation) return res.status(404).json({ message: "Donation not found." })
+
+        await updateTotalDonation(donation.endowmentPledgeId); 
+
         res.status(200).json({ message: "Donation deletion successful." })
     } catch (error) {
         res.status(400).json({ message: "Error deleting donation.", error })

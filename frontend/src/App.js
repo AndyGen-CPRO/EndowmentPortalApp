@@ -10,6 +10,7 @@ import ForgotPassword from './components/Auth/ForgotPassword';
 import Portfolio from './components/Portfolio/PortfolioPage';
 import AddPledge from './components/Portfolio/AddPledgePage';
 import EndowmentCalculator from './components/EndowmentCalculator/EndowmentCalculatorPage';
+import PledgeDataCalculator from './components/EndowmentCalculator/PledgeDataCalculatorPage';
 
 import { getToken, removeToken } from './utils/auth';
 
@@ -48,6 +49,7 @@ function App() {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/add-pledge" element={<AddPledge />} />
             <Route path="/endowment-calculator" element={<EndowmentCalculator />} />
+            <Route path="/pledge-data-calculator" element={<PledgeDataCalculator />} />
           </Routes>
       </Router>
     </div>

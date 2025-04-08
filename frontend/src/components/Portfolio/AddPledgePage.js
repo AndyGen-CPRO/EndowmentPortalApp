@@ -8,7 +8,6 @@ import "react-datepicker/dist/react-datepicker.css";
 const AddPledge = () => {
     const [beneficiaryName, setBeneficiaryName] = useState("");
     const [donationPurpose, setDonationPurpose] = useState("");
-    const [status, setStatus] = useState("on-going");
     const [pledgeStart, setPledgeStart] = useState(new Date());
     const [pledgeEnd, setPledgeEnd] = useState(new Date());
     const [donationType, setDonationType] = useState("fixed");
@@ -55,7 +54,6 @@ const AddPledge = () => {
             const response = await axios.post("http://localhost:5000/endowment-pledges/create", {
                 beneficiaryName,
                 donationPurpose,
-                status,
                 pledgeStart,
                 pledgeEnd,
                 donationType,
@@ -87,15 +85,6 @@ const AddPledge = () => {
                 <div>
                     <label>Donation Purpose (Emerging Needs, Community Needs, etc...)</label>
                     <input type="text" onChange={(e) => setDonationPurpose(e.target.value)} required />
-                </div>
-
-                <div>
-                    <label>Status: </label>
-                    <select onChange={(e) => setStatus(e.target.value)} selected="on-going">
-                        <option value="on-going">On-going</option>
-                        <option value="complete">Complete</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
                 </div>
 
                 <div>

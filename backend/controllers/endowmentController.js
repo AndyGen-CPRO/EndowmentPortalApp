@@ -7,7 +7,6 @@ const createEndowmentPledge = async (req, res) => {
         const { 
             beneficiaryName,
             donationPurpose,
-            status,
             pledgeStart,
             pledgeEnd,
             donationType,
@@ -29,6 +28,8 @@ const createEndowmentPledge = async (req, res) => {
             return res.status(400).json({ message: "An endowment pledge with the same details already exists." });
         }
 
+        let totalDonation = 0;
+
         if (donations && donations.length > 0) {
             for (let i = 0; i < donations.length; i++) {
                 const { donationDate } = donations[i]; 
@@ -38,21 +39,21 @@ const createEndowmentPledge = async (req, res) => {
                     return res.status(400).json({ message: `Donation for the year ${donationDate} already exists.` });
                 }
             }
+            totalDonation = donations.reduce((sum, donation) => sum + Number(donation.amount || 0), 0);
         }
 
         const newPledge = new EndowmentPledge({
             beneficiaryName,
             donationPurpose,
-            status,
             pledgeStart,
             pledgeEnd,
+            totalDonation,
             donationType,
             donorMessage,
             userId: req.user.id
         });
 
         await newPledge.save();
-
 
         console.log("Received donations:", donations);
         

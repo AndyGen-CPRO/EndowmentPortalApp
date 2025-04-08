@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import PledgeDelete  from './PledgeDeleteModal';
 
 const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => {
+    const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
     const [confirmDeleteModal, setConfirmDeleteModal] = useState(false)
     const [endowmentPledge, setEndowmentPledge] = useState(null);
     const [beneficiaryName, setBeneficiaryName] = useState("");
     const [donationPurpose, setDonationPurpose] = useState("");
-    const [status, setStatus] = useState("on-going");
     const [pledgeStart, setPledgeStart] = useState(new Date());
     const [pledgeEnd, setPledgeEnd] = useState(new Date());
+    const [totalDonation, setTotalDonation] = useState(0)
     const [donationType, setDonationType] = useState("fixed");
     const [fixedAmount, setFixedAmount] = useState(0);
     const [donations, setDonations] = useState([]);
@@ -35,9 +37,9 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         if (pledge) {
             setBeneficiaryName(pledge.beneficiaryName);
             setDonationPurpose(pledge.donationPurpose);
-            setStatus(pledge.status);
             setPledgeStart(new Date(pledge.pledgeStart));
             setPledgeEnd(new Date(pledge.pledgeEnd));
+            setTotalDonation(pledge.totalDonation);
         }
     }, [pledge]);
 
@@ -49,6 +51,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 },
             });
             setEndowmentPledge(response.data);
+            console.log(response.data)
         } catch (error) {
             setMessage(error);
         }
@@ -60,7 +63,6 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
             const response = await axios.put(`http://localhost:5000/endowment-pledges/${pledge._id}/`, {
                 beneficiaryName,
                 donationPurpose,
-                status,
                 pledgeStart,
                 pledgeEnd,
                 donationType,
@@ -71,7 +73,8 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 },
                 withCredentials: true,
             });
-            closeModal(false);
+            setEditMode(!editMode);
+            fetchEndowmentPledge();
             fetchEndowmentPledges();
             setMessage("Pledge update successful.")
         } catch (error) {
@@ -102,7 +105,6 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
         setEditMode(!editMode);
         setBeneficiaryName(pledge.beneficiaryName);
         setDonationPurpose(pledge.donationPurpose);
-        setStatus(pledge.status);
         setPledgeStart(pledge.pledgeStart);
         setPledgeEnd(pledge.pledgeEnd);
     }
@@ -142,6 +144,8 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 }
             });
             fetchDonations();
+            fetchEndowmentPledge();
+            fetchEndowmentPledges();
             setNewDonationYear(null)
             setAddDonationBtn(false);
             setMessage("Donation creation successful.");
@@ -167,6 +171,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 }
             });
             fetchDonations();
+            fetchEndowmentPledges();
             setEditDonationId(null);
             setMessage("Donation update successful.")
         } catch (error) {
@@ -184,6 +189,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 }
             });
             fetchDonations();
+            fetchEndowmentPledges();
             setMessage("Donation delete successful.")
         } catch (error) {
             setMessage("Donation delete failed.")
@@ -196,14 +202,18 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                 <button className='close-modal' onClick={() => closeModal(false)}>&times;</button>
                 {!editMode ? (
                     <div>
-                        <h2>{pledge.beneficiaryName}</h2>
-                        <h4>{pledge.donationPurpose}</h4>
-                        {pledge.donorMessage && <p>From the donor: <i>"{pledge.donorMessage}"</i></p>}
-                        <p className="pledge-detail">Status: {pledge.status}</p>
-                        <p>Pledge Start Date: {new Date(pledge.pledgeStart).getFullYear()}</p>
-                        <p>Pledge End Date: {new Date(pledge.pledgeEnd).getFullYear()}</p>
+                        <h2>{beneficiaryName}</h2>
+                        <h4>{donationPurpose}</h4>
+                        {pledge.donorMessage && <p>From the donor: <i>"{donorMessage}"</i></p>}
+                        <p>Pledge Start Date: {new Date(pledgeStart).getFullYear()}</p>
+                        <p>Pledge End Date: {new Date(pledgeEnd).getFullYear()}</p>
 
                         <button onClick={editBtn}>Edit Pledge</button>
+
+                        <button onClick={() => navigate("/pledge-data-calculator", { state: { pledge, donations }})}>
+                            View in Calculator
+                        </button>
+
                         <button onClick={() => setConfirmDeleteModal(true)}>Delete Pledge</button>
 
                         {/* Pledge Delete Confirmation Modal */}
@@ -247,6 +257,7 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                                     />
                                 </div>
                                 <button type="submit">Add</button>
+                                <button onClick={() => setAddDonationBtn(!addDonationBtn)}>Cancel</button>
                             </form>
                         )}
                         {donations.length > 0 ? (
@@ -291,15 +302,6 @@ const PledgeDetails = ({ closeModal, fetchEndowmentPledges, pledge, token }) => 
                             <div>
                                 <label>Donation Purpose (Emerging Needs, Community Needs, etc...)</label>
                                 <input value={donationPurpose} type="text" onChange={(e) => setDonationPurpose(e.target.value)} required />
-                            </div>
-            
-                            <div>
-                                <label>Status: </label>
-                                <select value={status} onChange={(e) => setStatus(e.target.value)} >
-                                    <option value="on-going">On-going</option>
-                                    <option value="complete">Complete</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
                             </div>
             
                             <div>
