@@ -71,7 +71,7 @@ const Login = ({ onLogIn, token }) => {
           />
         </div>
 
-        <button type="submit">Log In</button>
+        <button className="proceed-button" type="submit">Log In</button>
       </form>
 
       <p>

@@ -15,10 +15,10 @@ const Home = () => {
             <>
               <p>Please register or log in to continue</p>
               <Link to="/register">
-                <button>Register</button>
+                <button className="proceed-button">Register</button>
               </Link>
               <Link to="/login">
-                <button>Log In</button>
+                <button className="proceed-button">Log In</button>
               </Link>
             </>
           ) : (

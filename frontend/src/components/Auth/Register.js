@@ -127,7 +127,7 @@ const Register = () => {
                         </ul>
                     </div>
 
-                    <button type="submit">Register</button>
+                    <button className="proceed-button" type="submit">Register</button>
                 </form>
                 {message && (
                     <p>{message}</p>
